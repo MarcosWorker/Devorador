@@ -32,7 +32,7 @@ public class AdicionarDebitoActivity extends AppCompatActivity implements
     private EditText edtValorTotal;
     private EditText edtQtdParcela;
     private EditText edtDiaVencimanto;
-    private TextView tvValorParcela;
+    private String valorParcela;
     private Spinner spinnerTipo;
     private Button btSalvar;
     private String tela;
@@ -53,10 +53,10 @@ public class AdicionarDebitoActivity extends AppCompatActivity implements
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
                 tela = extras.getString("tela");
-            }else {
+            } else {
                 tela = getString(R.string.app_name);
             }
-        }else {
+        } else {
             tela = getString(R.string.app_name);
         }
         setTitle(tela);
@@ -73,47 +73,57 @@ public class AdicionarDebitoActivity extends AppCompatActivity implements
         query = realm.where(Tipo.class);
         tiposRealm = query.findAll();
 
-        for(Tipo tipo:tiposRealm){
+        for (Tipo tipo : tiposRealm) {
             tiposSpinner.add(tipo.getNome());
         }
 
-        arrayAdapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,tiposSpinner);
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, tiposSpinner);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //Setting the ArrayAdapter data on the Spinner
         spinnerTipo.setAdapter(arrayAdapter);
 
         btSalvar = findViewById(R.id.bt_salvar_add_debito);
+
         btSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm bgRealm) {
-                        Debito debito = bgRealm.createObject(Debito.class, UUID.randomUUID().toString());
-                        debito.setDescricao(edtDescricao.getText().toString());
-                        debito.setDiaVencimento(edtDiaVencimanto.getText().toString());
-                        debito.setQtdParcela(edtQtdParcela.getText().toString());
-                        debito.setQtdParcelaQuitada(0);
-                        debito.setStatus("pendente");
-                        debito.setTipo(tipo);
-                        debito.setValorParcela(Double.valueOf(tvValorParcela.getText().toString()));
-                        debito.setValorTotal(Double.valueOf(edtValorTotal.getText().toString()));
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(AdicionarDebitoActivity.this, "Débito salvo com sucesso!", Toast.LENGTH_SHORT).show();
-                        intent = new Intent(AdicionarDebitoActivity.this,MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        Log.d("MENSAGEM DE ERRO - ",error.getMessage());
-                        Toast.makeText(AdicionarDebitoActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+
+                if (edtDescricao.getText().toString().isEmpty() ||
+                        edtValorTotal.getText().toString().isEmpty() ||
+                        edtQtdParcela.getText().toString().isEmpty() ||
+                        edtDiaVencimanto.getText().toString().isEmpty()) {
+                    Toast.makeText(AdicionarDebitoActivity.this, "Dados insuficientes", Toast.LENGTH_SHORT).show();
+                } else {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm bgRealm) {
+                            Debito debito = bgRealm.createObject(Debito.class, UUID.randomUUID().toString());
+                            debito.setDescricao(edtDescricao.getText().toString());
+                            debito.setDiaVencimento(edtDiaVencimanto.getText().toString());
+                            debito.setQtdParcela(edtQtdParcela.getText().toString());
+                            debito.setQtdParcelaQuitada(0);
+                            debito.setStatus("pendente");
+                            debito.setTipo(tipo);
+                            valorParcela=String.valueOf(Double.valueOf(edtValorTotal.getText().toString())/Double.valueOf(edtQtdParcela.getText().toString()));
+                            debito.setValorParcela(Double.valueOf(valorParcela));
+                            debito.setValorTotal(Double.valueOf(edtValorTotal.getText().toString()));
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(AdicionarDebitoActivity.this, "Débito salvo com sucesso!", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(AdicionarDebitoActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            Log.d("MENSAGEM DE ERRO - ", error.getMessage());
+                            Toast.makeText(AdicionarDebitoActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }

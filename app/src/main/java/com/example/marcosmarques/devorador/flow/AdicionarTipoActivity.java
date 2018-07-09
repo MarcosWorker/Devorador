@@ -1,8 +1,8 @@
 package com.example.marcosmarques.devorador.flow;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +29,7 @@ public class AdicionarTipoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_adicionar_tipo);
         setTitle("Novo Tipo");
 
-        realm =Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
         edtNomeTipo = findViewById(R.id.tipo_add_tipo);
         btSalvar = findViewById(R.id.bt_salvar_add_tipo);
@@ -37,27 +37,31 @@ public class AdicionarTipoActivity extends AppCompatActivity {
         btSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm bgRealm) {
-                        Tipo tipo = bgRealm.createObject(Tipo.class, UUID.randomUUID().toString());
-                        tipo.setNome(edtNomeTipo.getText().toString());
-                    }
-                }, new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(AdicionarTipoActivity.this, "Tipo salvo com sucesso!", Toast.LENGTH_SHORT).show();
-                        intent = new Intent(AdicionarTipoActivity.this,MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }, new Realm.Transaction.OnError() {
-                    @Override
-                    public void onError(Throwable error) {
-                        Log.d("MENSAGEM DE ERRO - ",error.getMessage());
-                        Toast.makeText(AdicionarTipoActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                if (edtNomeTipo.getText().toString().isEmpty()) {
+                    Toast.makeText(AdicionarTipoActivity.this, "Dados insuficientes", Toast.LENGTH_SHORT).show();
+                } else {
+                    realm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm bgRealm) {
+                            Tipo tipo = bgRealm.createObject(Tipo.class, UUID.randomUUID().toString());
+                            tipo.setNome(edtNomeTipo.getText().toString());
+                        }
+                    }, new Realm.Transaction.OnSuccess() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(AdicionarTipoActivity.this, "Tipo salvo com sucesso!", Toast.LENGTH_SHORT).show();
+                            intent = new Intent(AdicionarTipoActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }, new Realm.Transaction.OnError() {
+                        @Override
+                        public void onError(Throwable error) {
+                            Log.d("MENSAGEM DE ERRO - ", error.getMessage());
+                            Toast.makeText(AdicionarTipoActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }

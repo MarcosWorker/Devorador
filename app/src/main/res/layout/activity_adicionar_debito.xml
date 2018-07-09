@@ -42,19 +42,12 @@
         android:layout_margin="8dp"
         android:hint="Quantidade de parcelas"
         android:inputType="number"/>
-    <TextView
-        android:id="@+id/valor_parcela_add_debito"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/qtd_parcela_add_debito"
-        android:text="Valor da parcela = R$ 00,00"
-        android:layout_margin="8dp" />
     <EditText
         android:id="@+id/dia_vencimento_add_debito"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_below="@id/valor_parcela_add_debito"
+        android:layout_below="@id/qtd_parcela_add_debito"
         android:hint="Dia de vencimanto"
         android:inputType="number"/>
     <Button

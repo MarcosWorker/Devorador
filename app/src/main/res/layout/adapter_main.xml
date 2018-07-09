@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layout_adapter_main">
+
+    <TextView
+        android:id="@+id/tipo_adapter_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/descricao_adapter_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tipo_adapter_main"
+        android:layout_margin="8dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/qtd_parcela_adapter_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/descricao_adapter_main"
+        android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/valor_parcela_adapter_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/qtd_parcela_adapter_main"
+        android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/valor_total_adapter_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/valor_parcela_adapter_main"
+        android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/dia_vencimento_adapter_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/valor_total_adapter_main"
+        android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/qtd_parcela_quiatada_adapter_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dia_vencimento_adapter_main"
+        android:layout_margin="8dp" />
+
+</RelativeLayout>
