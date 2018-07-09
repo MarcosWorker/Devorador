@@ -1,5 +1,7 @@
 package com.example.marcosmarques.devorador.flow;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +11,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.marcosmarques.devorador.R;
 import com.example.marcosmarques.devorador.bean.Debito;
 import com.example.marcosmarques.devorador.control.AdapterMain;
 
 import io.realm.Realm;
+import io.realm.exceptions.RealmError;
 
 public class MainActivity extends AppCompatActivity {
 

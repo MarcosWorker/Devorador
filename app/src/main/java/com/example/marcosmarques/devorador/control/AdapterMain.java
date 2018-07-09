@@ -1,5 +1,7 @@
 package com.example.marcosmarques.devorador.control;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,10 +14,14 @@ import android.widget.Toast;
 import com.example.marcosmarques.devorador.R;
 import com.example.marcosmarques.devorador.bean.Debito;
 
+import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
+import io.realm.exceptions.RealmError;
 
 public class AdapterMain extends RealmRecyclerViewAdapter<Debito, AdapterMain.ViewHolder> {
+
+    private Realm realm;
 
     public AdapterMain(RealmResults<Debito> data) {
         super(data, true);
@@ -45,8 +51,33 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Debito, AdapterMain.Vi
         viewHolder.tvValorTotal.setText("Valor Total - R$ " + String.valueOf(debito.getValorTotal()));
         viewHolder.layout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText(view.getContext(), "ok", Toast.LENGTH_SHORT).show();
+            public boolean onLongClick(final View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Deletar Débito ?")
+                        .setPositiveButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        })
+                        .setNegativeButton("Deletar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                realm = Realm.getDefaultInstance();
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        try {
+                                            debito.deleteFromRealm();
+                                        } catch (RealmError ex) {
+                                            Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                        } finally {
+                                            Toast.makeText(view.getContext(), "Débito excluído com sucesso", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+                                });
+                            }
+                        });
+                builder.show();
                 return true;
             }
         });
