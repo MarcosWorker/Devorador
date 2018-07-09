@@ -1,6 +1,5 @@
 package com.example.marcosmarques.devorador.flow;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,7 +20,6 @@ public class AdicionarTipoActivity extends AppCompatActivity {
     private EditText edtNomeTipo;
     private Button btSalvar;
     private Realm realm;
-    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +48,6 @@ public class AdicionarTipoActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess() {
                             Toast.makeText(AdicionarTipoActivity.this, "Tipo salvo com sucesso!", Toast.LENGTH_SHORT).show();
-                            intent = new Intent(AdicionarTipoActivity.this, MainActivity.class);
-                            startActivity(intent);
                             finish();
                         }
                     }, new Realm.Transaction.OnError() {

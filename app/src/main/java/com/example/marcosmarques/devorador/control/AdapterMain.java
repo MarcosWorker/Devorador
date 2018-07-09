@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.example.marcosmarques.devorador.R;
 import com.example.marcosmarques.devorador.bean.Debito;
 
+import java.text.DecimalFormat;
+
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
@@ -42,13 +44,14 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Debito, AdapterMain.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         final Debito debito = getItem(position);
+        DecimalFormat df = new DecimalFormat("###,##0.00");
         viewHolder.tvDescricao.setText(debito.getDescricao());
-        viewHolder.tvDiaVencimento.setText("Dia do Vencimento - " + debito.getDiaVencimento() + "de cada Mês");
+        viewHolder.tvDiaVencimento.setText("Dia do Vencimento - " + debito.getDiaVencimento() + " de cada Mês");
         viewHolder.tvParcelasQuitadas.setText(debito.getQtdParcelaQuitada() + " parcela(s) quitada(s)");
         viewHolder.tvQtdParcela.setText("Dividido em " + debito.getQtdParcela() + " vezes");
         viewHolder.tvTipo.setText(debito.getTipo());
-        viewHolder.tvValorParcela.setText("Valor Parcela - R$ " + String.valueOf(debito.getValorParcela()));
-        viewHolder.tvValorTotal.setText("Valor Total - R$ " + String.valueOf(debito.getValorTotal()));
+        viewHolder.tvValorParcela.setText("Valor Parcela - R$ " + String.valueOf(df.format(debito.getValorParcela())));
+        viewHolder.tvValorTotal.setText("Valor Total - R$ " + String.valueOf(df.format(debito.getValorTotal())));
         viewHolder.layout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View view) {

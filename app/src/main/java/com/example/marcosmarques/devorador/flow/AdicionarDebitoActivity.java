@@ -1,6 +1,5 @@
 package com.example.marcosmarques.devorador.flow;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.marcosmarques.devorador.R;
@@ -42,7 +40,7 @@ public class AdicionarDebitoActivity extends AppCompatActivity implements
     private RealmResults<Tipo> tiposRealm;
     private RealmQuery<Tipo> query;
     private String tipo;
-    private Intent intent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +102,7 @@ public class AdicionarDebitoActivity extends AppCompatActivity implements
                             debito.setQtdParcelaQuitada(0);
                             debito.setStatus("pendente");
                             debito.setTipo(tipo);
-                            valorParcela=String.valueOf(Double.valueOf(edtValorTotal.getText().toString())/Double.valueOf(edtQtdParcela.getText().toString()));
+                            valorParcela = String.valueOf(Double.valueOf(edtValorTotal.getText().toString()) / Double.valueOf(edtQtdParcela.getText().toString()));
                             debito.setValorParcela(Double.valueOf(valorParcela));
                             debito.setValorTotal(Double.valueOf(edtValorTotal.getText().toString()));
                         }
@@ -112,8 +110,6 @@ public class AdicionarDebitoActivity extends AppCompatActivity implements
                         @Override
                         public void onSuccess() {
                             Toast.makeText(AdicionarDebitoActivity.this, "Débito salvo com sucesso!", Toast.LENGTH_SHORT).show();
-                            intent = new Intent(AdicionarDebitoActivity.this, MainActivity.class);
-                            startActivity(intent);
                             finish();
                         }
                     }, new Realm.Transaction.OnError() {

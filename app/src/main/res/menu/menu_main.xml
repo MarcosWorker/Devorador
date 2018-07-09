@@ -10,6 +10,9 @@
         android:id="@+id/item_menu_main_pagar"
         android:title="Pagar" />
     <item
+        android:id="@+id/item_menu_main_deletar_tipo"
+        android:title="Deletar tipo" />
+    <item
         android:id="@+id/item_menu_main_sair"
         android:title="Sair" />
 
