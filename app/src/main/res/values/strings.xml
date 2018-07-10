@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Devorador</string>
+    <string-array name="spinner_sim_nao">
+        <item>Sim</item>
+        <item>Não</item>
+    </string-array>
 </resources>

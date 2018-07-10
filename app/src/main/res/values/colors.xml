@@ -3,4 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorPago">#c8b5efa5</color>
+    <color name="colorAtraso">#c8f53235</color>
 </resources>

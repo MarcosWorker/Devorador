@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/item_menu_main_novo_debito"
-        android:title="Novo débito" />
+        android:id="@+id/item_menu_main_nova_conta"
+        android:title="Nova conta" />
     <item
-        android:id="@+id/item_menu_main_novo_tipo"
-        android:title="Novo tipo" />
-    <item
-        android:id="@+id/item_menu_main_pagar"
-        android:title="Pagar" />
-    <item
-        android:id="@+id/item_menu_main_deletar_tipo"
-        android:title="Deletar tipo" />
+        android:id="@+id/item_menu_main_relatorio"
+        android:title="Relatorio" />
     <item
         android:id="@+id/item_menu_main_sair"
         android:title="Sair" />

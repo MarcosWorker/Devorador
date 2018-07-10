@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".flow.NovaContaActivity">
+
+    <TextView
+        android:id="@+id/titulo_nova_conta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Cartão de crédito ?"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/sp_cartao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titulo_nova_conta"
+        android:layout_margin="8dp" />
+
+    <EditText
+        android:id="@+id/descricao_nova_conta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sp_cartao"
+        android:layout_margin="8dp"
+        android:hint="Descrição da conta"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/dia_vencimento_nova_conta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/descricao_nova_conta"
+        android:layout_margin="8dp"
+        android:hint="Dia do vencimento"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/bt_salvar_nova_conta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dia_vencimento_nova_conta"
+        android:layout_margin="16dp"
+        android:background="@drawable/round_button"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Salvar"
+        android:textColor="#fff"
+        android:textSize="20dp" />
+
+</RelativeLayout>

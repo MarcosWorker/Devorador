@@ -2,30 +2,39 @@ package com.example.marcosmarques.devorador.control;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.marcosmarques.devorador.R;
-import com.example.marcosmarques.devorador.bean.Debito;
+import com.example.marcosmarques.devorador.bean.Conta;
+import com.example.marcosmarques.devorador.bean.ItemConta;
+import com.example.marcosmarques.devorador.flow.NovaContaActivity;
+import com.example.marcosmarques.devorador.flow.NovoItemContaActivity;
+import com.example.marcosmarques.devorador.flow.VisualizarContaActivity;
 
 import java.text.DecimalFormat;
+import java.util.GregorianCalendar;
 
 import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 import io.realm.RealmResults;
 import io.realm.exceptions.RealmError;
 
-public class AdapterMain extends RealmRecyclerViewAdapter<Debito, AdapterMain.ViewHolder> {
+public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.ViewHolder> {
 
     private Realm realm;
+    private AlertDialog.Builder builder;
+    private Intent intent;
 
-    public AdapterMain(RealmResults<Debito> data) {
+    public AdapterMain(RealmResults<Conta> data) {
         super(data, true);
         // Only set this if the model class has a primary key that is also a integer or long.
         // In that case, {@code getItemId(int)} must also be overridden to return the key.
@@ -43,45 +52,142 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Debito, AdapterMain.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        final Debito debito = getItem(position);
-        DecimalFormat df = new DecimalFormat("###,##0.00");
-        viewHolder.tvDescricao.setText(debito.getDescricao());
-        viewHolder.tvDiaVencimento.setText("Dia do Vencimento - " + debito.getDiaVencimento() + " de cada Mês");
-        viewHolder.tvParcelasQuitadas.setText(debito.getQtdParcelaQuitada() + " parcela(s) quitada(s)");
-        viewHolder.tvQtdParcela.setText("Dividido em " + debito.getQtdParcela() + " vezes");
-        viewHolder.tvTipo.setText(debito.getTipo());
-        viewHolder.tvValorParcela.setText("Valor Parcela - R$ " + String.valueOf(df.format(debito.getValorParcela())));
-        viewHolder.tvValorTotal.setText("Valor Total - R$ " + String.valueOf(df.format(debito.getValorTotal())));
-        viewHolder.layout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(final View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setMessage("Deletar Débito ?")
-                        .setPositiveButton("Cancelar", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
 
+        final Conta conta = getItem(position);
+        DecimalFormat df = new DecimalFormat("###,##0.00");
+        GregorianCalendar calendar = new GregorianCalendar();
+        viewHolder.tvDescricao.setText(conta.getDescricao());
+
+        // calculo do valor total
+        double total = 0.0;
+        double totalParcela = 0.0;
+        if (conta.getItens().size() > 0) {
+            for (ItemConta itemConta : conta.getItens()) {
+                totalParcela = itemConta.getValorTotal() / itemConta.getQtdParcela();
+                total = totalParcela + total;
+            }
+            viewHolder.tvValor.setText(String.valueOf(df.format(total)));
+        } else {
+            viewHolder.tvValor.setText(String.valueOf(df.format(total)));
+        }
+
+        viewHolder.tvVencimento.setText(conta.getDiaVencimento() + "/"
+                + calendar.get(GregorianCalendar.MONTH + 1) + "/"
+                + calendar.get(GregorianCalendar.YEAR));
+        //Regra de visualização
+        if (conta.isCartao()) {
+            viewHolder.btAdd.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.btAdd.setVisibility(View.INVISIBLE);
+        }
+        //visualizar conta
+
+        viewHolder.layoutItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(view.getContext(), VisualizarContaActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
+        //adicionar debito na conta
+
+        viewHolder.btAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(view.getContext(), NovoItemContaActivity.class);
+                view.getContext().startActivity(intent);
+            }
+        });
+
+        //pagar conta
+
+        viewHolder.btPag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                //setar mês pago
+                realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                conta.setMesPago(GregorianCalendar.MONTH);
+                realm.commitTransaction();
+                //se for cartao atualizar
+                if (conta.isCartao()) {
+                    if (conta.getItens().size() > 0) {
+                        for (final ItemConta itemConta : conta.getItens()) {
+                            int qtdParcela = itemConta.getQtdParcela() - 1;
+                            if (qtdParcela <= 0) {
+                                realm.executeTransaction(new Realm.Transaction() {
+                                    @Override
+                                    public void execute(Realm realm) {
+                                        try {
+                                            itemConta.deleteFromRealm();
+                                        } catch (RealmError ex) {
+                                            Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            } else {
+                                realm.beginTransaction();
+                                itemConta.setQtdParcela(qtdParcela);
+                                realm.commitTransaction();
                             }
-                        })
-                        .setNegativeButton("Deletar", new DialogInterface.OnClickListener() {
+                        }
+                    } else {
+                        Toast.makeText(view.getContext(), "Não existem débitos no cartão " + conta.getDescricao(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            try {
+                                conta.deleteFromRealm();
+                            } catch (RealmError ex) {
+                                Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        //verificar situacao da conta no mes
+        if (conta.getMesPago() == GregorianCalendar.MONTH) {
+            viewHolder.layoutItem.setBackgroundResource(R.color.colorPago);
+        } else if (conta.getDiaVencimento() < GregorianCalendar.DAY_OF_MONTH) {
+            viewHolder.layoutItem.setBackgroundResource(R.color.colorAtraso);
+        }
+
+        //excluir conta
+        viewHolder.btDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+
+                builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Excluir a conta " + conta.getDescricao() + "?")
+                        .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 realm = Realm.getDefaultInstance();
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
                                         try {
-                                            debito.deleteFromRealm();
+                                            conta.deleteFromRealm();
                                         } catch (RealmError ex) {
                                             Toast.makeText(view.getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                                         } finally {
-                                            Toast.makeText(view.getContext(), "Débito excluído com sucesso", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(view.getContext(), "Cliente excluído com sucesso", Toast.LENGTH_SHORT).show();
                                         }
 
                                     }
                                 });
                             }
+                        })
+                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
                         });
                 builder.show();
-                return true;
             }
         });
 
@@ -90,25 +196,24 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Debito, AdapterMain.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvDescricao;
-        private TextView tvTipo;
-        private TextView tvQtdParcela;
-        private TextView tvValorParcela;
-        private TextView tvValorTotal;
-        private TextView tvDiaVencimento;
-        private TextView tvParcelasQuitadas;
-        private RelativeLayout layout;
+        private TextView tvVencimento;
+        private TextView tvValor;
+        private Button btAdd;
+        private Button btDel;
+        private Button btPag;
+        private RelativeLayout layoutItem;
 
         public ViewHolder(View v) {
             super(v);
 
             tvDescricao = v.findViewById(R.id.descricao_adapter_main);
-            tvTipo = v.findViewById(R.id.tipo_adapter_main);
-            tvQtdParcela = v.findViewById(R.id.qtd_parcela_adapter_main);
-            tvValorParcela = v.findViewById(R.id.valor_parcela_adapter_main);
-            tvValorTotal = v.findViewById(R.id.valor_total_adapter_main);
-            tvDiaVencimento = v.findViewById(R.id.dia_vencimento_adapter_main);
-            tvParcelasQuitadas = v.findViewById(R.id.qtd_parcela_quiatada_adapter_main);
-            layout = v.findViewById(R.id.layout_adapter_main);
+            tvVencimento = v.findViewById(R.id.vencimento_adapter_main);
+            tvValor = v.findViewById(R.id.valor_adapter_main);
+            btAdd = v.findViewById(R.id.bt_add_item_adapter_main);
+            btDel = v.findViewById(R.id.bt_excluir_item_adapter_main);
+            btPag = v.findViewById(R.id.bt_pagar_item_adapter_main);
+            layoutItem = v.findViewById(R.id.layout_adapter_main);
+
         }
 
     }

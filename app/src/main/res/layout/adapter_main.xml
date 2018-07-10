@@ -1,58 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_adapter_main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/layout_adapter_main">
-
-    <TextView
-        android:id="@+id/tipo_adapter_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:textSize="20dp"
-        android:textStyle="bold"/>
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/descricao_adapter_main"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tipo_adapter_main"
         android:layout_margin="8dp"
-        android:textStyle="bold"/>
+        android:text="Visa"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/qtd_parcela_adapter_main"
-        android:layout_width="match_parent"
+        android:id="@+id/vencimento_adapter_main"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/descricao_adapter_main"
-        android:layout_margin="8dp" />
+        android:layout_margin="8dp"
+        android:text="08/08/2018"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15dp"
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/valor_parcela_adapter_main"
-        android:layout_width="match_parent"
+        android:id="@+id/valor_adapter_main"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/qtd_parcela_adapter_main"
-        android:layout_margin="8dp" />
+        android:layout_below="@id/vencimento_adapter_main"
+        android:layout_margin="8dp"
+        android:text="R$ 3300.87"
+        android:textColor="@color/colorAccent"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/valor_total_adapter_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/valor_parcela_adapter_main"
-        android:layout_margin="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#d9d3d3"
+            android:gravity="center"
+            android:layout_below="@id/valor_adapter_main"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/dia_vencimento_adapter_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/valor_total_adapter_main"
-        android:layout_margin="8dp" />
+            <Button
+                android:id="@+id/bt_add_item_adapter_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button"
+                android:padding="8dp"
+                android:text="Inserir"
+                android:textColor="#fff" />
 
-    <TextView
-        android:id="@+id/qtd_parcela_quiatada_adapter_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dia_vencimento_adapter_main"
-        android:layout_margin="8dp" />
+            <Button
+                android:id="@+id/bt_pagar_item_adapter_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button"
+                android:padding="8dp"
+                android:text="Pagar"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/bt_excluir_item_adapter_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/round_button"
+                android:padding="8dp"
+                android:text="Excluir"
+                android:textColor="#fff" />
+        </LinearLayout>
 
 </RelativeLayout>
