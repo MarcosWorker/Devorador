@@ -23,6 +23,7 @@ public class NovaContaActivity extends AppCompatActivity implements AdapterView.
     private Spinner spinnerCartao;
     private EditText edtDescricao;
     private EditText edtDiavencimento;
+    private EditText edtValor;
     private Button btSalvar;
     private ArrayAdapter<CharSequence> adapter;
     private Realm realm;
@@ -44,6 +45,7 @@ public class NovaContaActivity extends AppCompatActivity implements AdapterView.
 
         edtDescricao = findViewById(R.id.descricao_nova_conta);
         edtDiavencimento = findViewById(R.id.dia_vencimento_nova_conta);
+        edtValor = findViewById(R.id.valor_nova_conta);
         btSalvar = findViewById(R.id.bt_salvar_nova_conta);
 
         btSalvar.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +62,11 @@ public class NovaContaActivity extends AppCompatActivity implements AdapterView.
                             Conta conta = bgRealm.createObject(Conta.class, UUID.randomUUID().toString());
                             conta.setCartao(cartao);
                             conta.setDescricao(edtDescricao.getText().toString());
+                            if(edtValor.getText().toString().isEmpty()){
+                                conta.setTotalConta(0.0);
+                            }else{
+                                conta.setTotalConta(Double.valueOf(edtValor.getText().toString()));
+                            }
                             conta.setDiaVencimento(Integer.valueOf(edtDiavencimento.getText().toString()));
                         }
                     }, new Realm.Transaction.OnSuccess() {
@@ -85,8 +92,10 @@ public class NovaContaActivity extends AppCompatActivity implements AdapterView.
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
         String item = parent.getItemAtPosition(position).toString();
         if (item.equals("Sim")) {
+            edtValor.setVisibility(View.INVISIBLE);
             this.cartao = true;
         } else {
+            edtValor.setVisibility(View.VISIBLE);
             this.cartao = false;
         }
     }
@@ -94,5 +103,6 @@ public class NovaContaActivity extends AppCompatActivity implements AdapterView.
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         this.cartao = false;
+        edtValor.setVisibility(View.INVISIBLE);
     }
 }

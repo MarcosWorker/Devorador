@@ -13,7 +13,7 @@ public class ItemConta extends RealmObject {
     @Required
     private String descricao;
     @Required
-    private Date dataCompra;
+    private String dataCompra;
     private double valorTotal;
     private int qtdParcela;
 
@@ -36,11 +36,11 @@ public class ItemConta extends RealmObject {
         this.descricao = descricao;
     }
 
-    public Date getDataCompra() {
+    public String getDataCompra() {
         return dataCompra;
     }
 
-    public void setDataCompra(Date dataCompra) {
+    public void setDataCompra(String dataCompra) {
         this.dataCompra = dataCompra;
     }
 

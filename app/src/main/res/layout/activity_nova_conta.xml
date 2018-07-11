@@ -38,12 +38,20 @@
         android:layout_margin="8dp"
         android:hint="Dia do vencimento"
         android:inputType="number" />
+    <EditText
+        android:id="@+id/valor_nova_conta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dia_vencimento_nova_conta"
+        android:layout_margin="8dp"
+        android:hint="Valor total                                                            "
+        android:inputType="numberDecimal" />
 
     <Button
         android:id="@+id/bt_salvar_nova_conta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dia_vencimento_nova_conta"
+        android:layout_below="@id/valor_nova_conta"
         android:layout_margin="16dp"
         android:background="@drawable/round_button"
         android:gravity="center"

@@ -1,57 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".flow.NovoItemContaActivity">
 
-    <EditText
-        android:id="@+id/descricao_novo_item"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Descrição do débito"
-        android:layout_margin="8dp"/>
-    <TextView
-        android:id="@+id/texto_data_de_compra"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Data de compra"
-        android:layout_margin="8dp"
-        android:layout_below="@id/descricao_novo_item"/>
-    <CalendarView
-        android:id="@+id/data_compra"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_below="@id/texto_data_de_compra"/>
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/valor_novo_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Descrição do débito"
-        android:layout_margin="8dp"
-        android:layout_below="@id/data_compra"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/qtd_parcela_novo_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Descrição do débito"
-        android:layout_margin="8dp"
-        android:layout_below="@id/valor_novo_item"/>
-    <Button
-        android:id="@+id/bt_salvar_nova_conta"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/qtd_parcela_novo_item"
-        android:layout_margin="16dp"
-        android:background="@drawable/round_button"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="Salvar"
-        android:textColor="#fff"
-        android:textSize="20dp" />
+            <EditText
+                android:id="@+id/descricao_novo_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:hint="Descrição" />
+
+            <TextView
+                android:id="@+id/texto_data_de_compra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:text="Data de compra"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <DatePicker
+                android:id="@+id/data_compra"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:calendarTextColor="@color/colorPrimaryDark" />
+
+            <EditText
+                android:id="@+id/valor_novo_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:hint="Valor"
+                android:inputType="numberDecimal"/>
+
+            <EditText
+                android:id="@+id/qtd_parcela_novo_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:hint="Quantidade de parcelas"
+                android:inputType="number"/>
+
+            <Button
+                android:id="@+id/bt_salvar_novo_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/round_button"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Salvar"
+                android:textColor="#fff"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+    </ScrollView>
+
 
 </RelativeLayout>

@@ -16,11 +16,11 @@ import android.widget.Toast;
 import com.example.marcosmarques.devorador.R;
 import com.example.marcosmarques.devorador.bean.Conta;
 import com.example.marcosmarques.devorador.bean.ItemConta;
-import com.example.marcosmarques.devorador.flow.NovaContaActivity;
 import com.example.marcosmarques.devorador.flow.NovoItemContaActivity;
 import com.example.marcosmarques.devorador.flow.VisualizarContaActivity;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import io.realm.Realm;
@@ -61,18 +61,24 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
         // calculo do valor total
         double total = 0.0;
         double totalParcela = 0.0;
-        if (conta.getItens().size() > 0) {
-            for (ItemConta itemConta : conta.getItens()) {
-                totalParcela = itemConta.getValorTotal() / itemConta.getQtdParcela();
-                total = totalParcela + total;
+        if(conta.isCartao()){
+            if (conta.getItens().size() > 0) {
+                for (ItemConta itemConta : conta.getItens()) {
+                    totalParcela = itemConta.getValorTotal() / itemConta.getQtdParcela();
+                    total = totalParcela + total;
+                }
+                viewHolder.tvValor.setText(String.valueOf(df.format(total)));
+            } else {
+                viewHolder.tvValor.setText(String.valueOf(df.format(total)));
             }
-            viewHolder.tvValor.setText(String.valueOf(df.format(total)));
-        } else {
+        }else{
+            total = conta.getTotalConta();
             viewHolder.tvValor.setText(String.valueOf(df.format(total)));
         }
 
+
         viewHolder.tvVencimento.setText(conta.getDiaVencimento() + "/"
-                + calendar.get(GregorianCalendar.MONTH + 1) + "/"
+                + (Integer.valueOf(calendar.get(Calendar.MONTH)) + 1) + "/"
                 + calendar.get(GregorianCalendar.YEAR));
         //Regra de visualização
         if (conta.isCartao()) {
@@ -86,6 +92,7 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
             @Override
             public void onClick(View view) {
                 intent = new Intent(view.getContext(), VisualizarContaActivity.class);
+                intent.putExtra("id",conta.getId());
                 view.getContext().startActivity(intent);
             }
         });
@@ -96,6 +103,7 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
             @Override
             public void onClick(View view) {
                 intent = new Intent(view.getContext(), NovoItemContaActivity.class);
+                intent.putExtra("id",conta.getId());
                 view.getContext().startActivity(intent);
             }
         });
@@ -107,9 +115,6 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
             public void onClick(final View view) {
                 //setar mês pago
                 realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                conta.setMesPago(GregorianCalendar.MONTH);
-                realm.commitTransaction();
                 //se for cartao atualizar
                 if (conta.isCartao()) {
                     if (conta.getItens().size() > 0) {
@@ -128,6 +133,7 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
                                 });
                             } else {
                                 realm.beginTransaction();
+                                conta.setMesPago(GregorianCalendar.MONTH);
                                 itemConta.setQtdParcela(qtdParcela);
                                 realm.commitTransaction();
                             }

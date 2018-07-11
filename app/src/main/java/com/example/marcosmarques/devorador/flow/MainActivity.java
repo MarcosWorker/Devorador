@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.item_menu_main_sair:
-                onDestroy();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
