@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("Contas a Pagar");
         realm = Realm.getDefaultInstance();
         recyclerView = findViewById(R.id.list_main);
         montarLista();
@@ -47,14 +48,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.item_menu_main_nova_conta:
                 intent = new Intent(MainActivity.this, NovaContaActivity.class);
                 startActivity(intent);
-                return true;
-            case R.id.item_menu_main_relatorio:
-                intent = new Intent(MainActivity.this, RelatorioActivity.class);
-                intent.putExtra("tela", "novo");
-                startActivity(intent);
-                return true;
-            case R.id.item_menu_main_sair:
-                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -28,6 +28,9 @@ public class NovoItemContaActivity extends AppCompatActivity {
     private Realm realm;
     private String idConta;
     private ItemConta itemConta;
+    private String idItemConta;
+    private RealmQuery<Conta> queryConta;
+    private RealmQuery<ItemConta> queryItemConta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,17 +66,17 @@ public class NovoItemContaActivity extends AppCompatActivity {
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm bgRealm) {
-                            itemConta = bgRealm.createObject(ItemConta.class, UUID.randomUUID().toString());
+                            idItemConta = UUID.randomUUID().toString();
+                            itemConta = bgRealm.createObject(ItemConta.class, idItemConta);
                             itemConta.setQtdParcela(Integer.valueOf(qtdParcela.getText().toString()));
                             itemConta.setDataCompra(datePicker.getDayOfMonth() + "/" + datePicker.getMonth() + "/" + datePicker.getYear());
                             itemConta.setDescricao(edtDescricao.getText().toString());
                             itemConta.setValorTotal(Double.valueOf(edtValor.getText().toString()));
-
                         }
                     }, new Realm.Transaction.OnSuccess() {
                         @Override
                         public void onSuccess() {
-                            adicionarItemNaConta(itemConta);
+                            adicionarItemNaConta();
                             finish();
                         }
                     }, new Realm.Transaction.OnError() {
@@ -88,10 +91,14 @@ public class NovoItemContaActivity extends AppCompatActivity {
         });
     }
 
-    private void adicionarItemNaConta(ItemConta itemConta) {
+    private void adicionarItemNaConta() {
         realm.beginTransaction();
-        RealmQuery<Conta> queryConta = realm.where(Conta.class).equalTo("id", idConta);
+
+        queryConta = realm.where(Conta.class).equalTo("id", idConta);
         Conta conta = queryConta.findFirst();
+
+        queryItemConta = realm.where(ItemConta.class).equalTo("id", idItemConta);
+        ItemConta itemConta = queryItemConta.findFirst();
 
         conta.getItens().add(itemConta);
         realm.commitTransaction();

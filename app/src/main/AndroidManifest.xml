@@ -18,7 +18,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".flow.NovaContaActivity" />
-        <activity android:name=".flow.RelatorioActivity" />
         <activity android:name=".flow.NovoItemContaActivity" />
         <activity android:name=".flow.VisualizarContaActivity"></activity>
     </application>

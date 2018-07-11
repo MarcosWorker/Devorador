@@ -33,7 +33,7 @@ public class NovaContaActivity extends AppCompatActivity implements AdapterView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nova_conta);
-
+        setTitle("Nova Conta");
         realm = Realm.getDefaultInstance();
 
         spinnerCartao = findViewById(R.id.sp_cartao);

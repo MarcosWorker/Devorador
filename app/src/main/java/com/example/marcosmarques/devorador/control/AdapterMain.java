@@ -61,7 +61,7 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
         // calculo do valor total
         double total = 0.0;
         double totalParcela = 0.0;
-        if(conta.isCartao()){
+        if (conta.isCartao()) {
             if (conta.getItens().size() > 0) {
                 for (ItemConta itemConta : conta.getItens()) {
                     totalParcela = itemConta.getValorTotal() / itemConta.getQtdParcela();
@@ -71,7 +71,7 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
             } else {
                 viewHolder.tvValor.setText(String.valueOf(df.format(total)));
             }
-        }else{
+        } else {
             total = conta.getTotalConta();
             viewHolder.tvValor.setText(String.valueOf(df.format(total)));
         }
@@ -92,7 +92,7 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
             @Override
             public void onClick(View view) {
                 intent = new Intent(view.getContext(), VisualizarContaActivity.class);
-                intent.putExtra("id",conta.getId());
+                intent.putExtra("id", conta.getId());
                 view.getContext().startActivity(intent);
             }
         });
@@ -103,7 +103,7 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
             @Override
             public void onClick(View view) {
                 intent = new Intent(view.getContext(), NovoItemContaActivity.class);
-                intent.putExtra("id",conta.getId());
+                intent.putExtra("id", conta.getId());
                 view.getContext().startActivity(intent);
             }
         });
@@ -118,9 +118,10 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
                 //se for cartao atualizar
                 if (conta.isCartao()) {
                     if (conta.getItens().size() > 0) {
-                        for (final ItemConta itemConta : conta.getItens()) {
+                        for (int i = conta.getItens().size() - 1; i >= 0; i--) {
+                            final ItemConta itemConta = conta.getItens().get(i);
                             int qtdParcela = itemConta.getQtdParcela() - 1;
-                            if (qtdParcela <= 0) {
+                            if (qtdParcela == 0) {
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
@@ -159,8 +160,6 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
         //verificar situacao da conta no mes
         if (conta.getMesPago() == GregorianCalendar.MONTH) {
             viewHolder.layoutItem.setBackgroundResource(R.color.colorPago);
-        } else if (conta.getDiaVencimento() < GregorianCalendar.DAY_OF_MONTH) {
-            viewHolder.layoutItem.setBackgroundResource(R.color.colorAtraso);
         }
 
         //excluir conta
@@ -197,6 +196,11 @@ public class AdapterMain extends RealmRecyclerViewAdapter<Conta, AdapterMain.Vie
             }
         });
 
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/item_menu_main_nova_conta"
         android:title="Nova conta" />
-    <item
-        android:id="@+id/item_menu_main_relatorio"
-        android:title="Relatorio" />
-    <item
-        android:id="@+id/item_menu_main_sair"
-        android:title="Sair" />
 
 </menu>
